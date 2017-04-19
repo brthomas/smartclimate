@@ -1,23 +1,41 @@
 package domaine;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.FileUtils;
 
 public class Utilitaire {
 	
-	private String meteoFrance;
 	
 	public void ouvrirFichier(String path){
+	        File fichiermeteo = new File(path);
+	        
+	        List<String> donneesfichier = new ArrayList<String>();
+
+	        FileReader filereader = new FileReader(fichiermeteo);
+	        BufferedReader bufferedreader = new BufferedReader(filereader);
+	        for (String line = bufferedreader.readLine(); line != null; line = bufferedreader.readLine()) {
+	            donneesfichier.add(line);
+	        }
+
+	        bufferedreader.close();
+	        filereader.close();
+
+	        return donneesfichier;
+	        
 		
 	}
 	
@@ -75,13 +93,24 @@ public class Utilitaire {
 	}
 	
 
-	public String getMeteoFrance() {
-		return meteoFrance;
+	public List<String> FichiersDisponibles() {
+		
+		File repertoire = new File("../SmartClimate");
+
+		String [] listefichiers;
+		List<String> listefichiersdispos = new ArrayList<String>();
+
+		int i; 
+		listefichiers=repertoire.list(); 
+		for(i=0;i<listefichiers.length;i++){ 
+			if(listefichiers[i].endsWith(".csv")==true){ 
+				System.out.println(listefichiers[i].substring(0,listefichiers[i].length()-4));
+				listefichiersdispos.add(listefichiers[i].substring(0,listefichiers[i].length()-4));
+			} 
+		} 
+		return listefichiersdispos;
 	}
 
-	public void setMeteoFrance(String meteoFrance) {
-		this.meteoFrance = meteoFrance;
-	}
 	
 	/*public Map<int, String> chargerStations(){
 		
